@@ -44,15 +44,22 @@ Input: "${text}"
 
     const result = await response.json();
     const aiContent = result.choices?.[0]?.message?.content;
+    console.log("OpenAI raw response:", JSON.stringify(result));
+    console.log("OpenAI message content:", aiContent);
+
     let parsed;
     try {
       parsed = JSON.parse(aiContent);
     } catch (e) {
+      // Log the error and content for debugging
+      console.error("Error parsing JSON from OpenAI:", e, aiContent);
       res.status(500).json({ error: "AI parsing failed", aiContent });
       return;
     }
     res.status(200).json(parsed);
   } catch (err) {
+    // Log the error for debugging
+    console.error("Unexpected error:", err);
     res.status(500).json({ error: err.message });
   }
-} 
+}
